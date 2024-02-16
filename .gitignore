@@ -2,3 +2,4 @@
 .idea
 result
 *.tar.gz
+bootstrap.sh

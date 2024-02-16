@@ -28,6 +28,8 @@ Bootstrap your Windows desktop like a boss.
   wsl --distribution NixOS
   ```
 
+4. Use the shell or open http://localhost:3000 for an integrated development environment
+
 ## Building your own NixOS WSL distribution
 
 Check out these resources:
