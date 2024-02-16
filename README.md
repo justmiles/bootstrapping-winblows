@@ -56,4 +56,3 @@ By following this approach, you can have your entire Nix environment available o
 
 - check for and install all updates
 - provide instructions for making changes
-

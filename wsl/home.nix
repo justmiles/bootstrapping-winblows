@@ -1,6 +1,4 @@
 {
-  # FIXME: uncomment the next line if you want to reference your GitHub/GitLab access tokens and other secrets
-  # secrets,
   config,
   pkgs,
   username,
@@ -8,7 +6,6 @@
   ...
 }: let
   unstable-packages = with pkgs.unstable; [
-    # FIXME: select your core binaries that you always want on the bleeding-edge
     bat
     bottom
     coreutils
@@ -37,7 +34,9 @@
   ];
 
   stable-packages = with pkgs; [
-
+    # daemons
+    openvscode-server
+    
     # key tools
     gh
     just
