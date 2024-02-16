@@ -54,5 +54,5 @@ By following this approach, you can have your entire Nix environment available o
 
 ## TODOs
 
-- check for and install all updates
+- check for and install all Windows updates
 - provide instructions for making changes

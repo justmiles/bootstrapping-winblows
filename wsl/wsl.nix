@@ -69,6 +69,28 @@
   #   };
   # };
 
+  systemd.services.openvscode-server = {
+    enable = true;
+    description = "Open VSCode Server";
+    serviceConfig = {
+      ExecStart = "${pkgs.openvscode-server}/bin/openvscode-server --accept-server-license-terms --without-connection-token --port=3000";
+      Restart="always";
+      User = username;
+    };
+    wantedBy = [ "multi-user.target" ];
+  };
+
+  systemd.services.init-chezmoi-public = {
+    enable = true;
+    description = "Init chezmoi-public";
+    serviceConfig = {
+      ExecStart = "${pkgs.chezmoi}/bin/chezmoi --exclude scripts --source /home/${username}/.config/chezmoi-public --cache /home/${username}/.cache/chezmoi-public --refresh-externals init --apply https://github.com/justmiles/dotfiles.git";
+      Type="oneshot";
+      User = username;
+    };
+    wantedBy = [ "multi-user.target" ];
+  };
+
   nix = {
     settings = {
       trusted-users = [username];

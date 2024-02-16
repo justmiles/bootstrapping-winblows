@@ -56,6 +56,7 @@
     nomad
     pre-commit
     tfswitch
+    gnumake
     
     # core languages
     rustup
@@ -132,6 +133,11 @@ in {
       # pkgs.some-package
       # pkgs.unstable.some-other-package
     ];
+
+  home.file = {
+    Downloads.source = config.lib.file.mkOutOfStoreSymlink "/mnt/c/Users/mmaddox/Documents/workspaces";
+    Downloads.target = "workspaces";
+  };
 
   programs = {
     home-manager.enable = true;

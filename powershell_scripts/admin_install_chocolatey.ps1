@@ -26,4 +26,5 @@ choco install -y `
   powertoys `
   slack `
   tabby `
-  zoom
+  zoom `
+  openvpn
