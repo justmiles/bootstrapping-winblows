@@ -19,7 +19,7 @@ Bootstrap your Windows desktop like a boss.
     - Create a "workspaces" folder to persist your working documents outside of NixOS
     
       ```powershell
-      New-Item -Path "$HOME -Name "workspaces" -ItemType "directory"
+      New-Item -Path "$HOME" -Name "workspaces" -ItemType "directory"
       ```
 
     - Download this pre-built NixOS installation and import it into a WSL distirbution called "NixOS"
@@ -40,6 +40,11 @@ Bootstrap your Windows desktop like a boss.
 
 4. Use the shell or open http://localhost:3000 for an integrated development environment
 
+## Updating to the latest
+
+1. Clone this repo
+
+2. 
 ## Building your own NixOS WSL distribution
 
 Check out these resources:
