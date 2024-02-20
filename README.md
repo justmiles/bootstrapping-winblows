@@ -42,7 +42,7 @@ Bootstrap your Windows desktop like a boss.
 
 ## Updating to the latest
 
-1. Clone this repo
+1. From inside of WSL, clone this repo
     ```bash
     git clone git@github.com:justmiles/bootstrapping-winblows.git
     cd bootstrapping-winblows
