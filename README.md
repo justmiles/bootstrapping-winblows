@@ -43,8 +43,17 @@ Bootstrap your Windows desktop like a boss.
 ## Updating to the latest
 
 1. Clone this repo
+    ```bash
+    git clone git@github.com:justmiles/bootstrapping-winblows.git
+    cd bootstrapping-winblows
+    ```
+    
+2. Rebuild using the latest
 
-2. 
+    ```bash
+    sudo nixos-rebuild switch --flake ./wsl
+    ```
+
 ## Building your own NixOS WSL distribution
 
 Check out these resources:
