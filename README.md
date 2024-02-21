@@ -26,12 +26,18 @@ Bootstrap your Windows desktop like a boss.
     # Create a "workspaces" folder to persist your working documents outside of WSL
     wsl -d NixOS /run/current-system/sw/bin/mkdir -p "/mnt/c/Users/$env:USERNAME/Documents/workspaces"
     wsl -d NixOS /run/current-system/sw/bin/ln -s "/mnt/c/Users/$env:USERNAME/Documents/workspaces" "/home/nixos/workspaces"
-
+    
     # Launch NixOS
     wsl --distribution NixOS
     ```
 
-4. From inside of WSL, clone this repo
+5. From inside of WSL, update channels
+
+    ```bash
+    sudo nix-channel --update
+    ```
+
+4. Clone this repo
     
     ```bash
     cd ~/workspaces
