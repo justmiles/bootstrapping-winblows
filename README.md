@@ -37,7 +37,7 @@ Bootstrap your Windows desktop like a boss.
     sudo nix-channel --update
     ```
 
-4. Clone this repo
+6. Clone this repo
     
     ```bash
     cd ~/workspaces
@@ -46,22 +46,22 @@ Bootstrap your Windows desktop like a boss.
     cd bootstrapping-winblows
     ```
 
-5. Update `wsl/flake.nix` to set your username 
+7. Update `wsl/flake.nix` to set your username 
 
     ```bash
     grep "username =" wsl/flake.nix
     vi wsl/flake.nix
     ```
 
-6. Rebuild using the latest
+8. Rebuild using the latest
 
     ```bash
     sudo nixos-rebuild switch --flake ./wsl
     ```
 
-7. Use the `wsl -d NixOS` to launch the shell or open http://localhost:3000 for an integrated development environment
+9. Use the `wsl -d NixOS` to launch the shell or open http://localhost:3000 for an integrated development environment
 
-8. Fork this repo and start making changes to build out your own environment.
+10. Fork this repo and start making changes to build out your own environment.
 
     - check out https://search.nixos.org for packages and flakes
 
