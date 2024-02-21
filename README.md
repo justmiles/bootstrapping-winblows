@@ -50,6 +50,7 @@ Bootstrap your Windows desktop like a boss.
 
     ```bash
     grep "username =" wsl/flake.nix
+    nix-shell -p vim
     vi wsl/flake.nix
     ```
 
