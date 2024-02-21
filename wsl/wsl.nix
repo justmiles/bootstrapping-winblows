@@ -1,9 +1,8 @@
-{
-  username,
-  hostname,
-  pkgs,
-  inputs,
-  ...
+{ username
+, hostname
+, pkgs
+, inputs
+, ...
 }: {
   time.timeZone = "America/Chicago";
 
@@ -15,8 +14,8 @@
   ];
 
   programs.zsh.enable = true;
-  environment.pathsToLink = ["/share/zsh"];
-  environment.shells = [pkgs.zsh];
+  environment.pathsToLink = [ "/share/zsh" ];
+  environment.shells = [ pkgs.zsh ];
 
   environment.enableAllTerminfo = true;
 
@@ -32,7 +31,7 @@
   };
 
   environment.systemPackages = [
-    (import ./win32yank.nix {inherit pkgs;})
+    (import ./win32yank.nix { inherit pkgs; })
   ];
 
   home-manager.users.${username} = {
@@ -74,7 +73,7 @@
     description = "Open VSCode Server";
     serviceConfig = {
       ExecStart = "${pkgs.openvscode-server}/bin/openvscode-server --accept-server-license-terms --without-connection-token --port=3000";
-      Restart="always";
+      Restart = "always";
       User = username;
     };
     wantedBy = [ "multi-user.target" ];
@@ -85,7 +84,7 @@
     description = "Init chezmoi-public";
     serviceConfig = {
       ExecStart = "${pkgs.chezmoi}/bin/chezmoi --exclude scripts --source /home/${username}/.config/chezmoi-public --cache /home/${username}/.cache/chezmoi-public --refresh-externals init --apply https://github.com/justmiles/dotfiles.git";
-      Type="oneshot";
+      Type = "oneshot";
       User = username;
     };
     wantedBy = [ "multi-user.target" ];
@@ -93,7 +92,7 @@
 
   nix = {
     settings = {
-      trusted-users = [username];
+      trusted-users = [ username ];
       accept-flake-config = true;
       auto-optimise-store = true;
     };

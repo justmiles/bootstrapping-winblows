@@ -1,10 +1,10 @@
-{
-  config,
-  pkgs,
-  username,
-  nix-index-database,
-  ...
-}: let
+{ config
+, pkgs
+, username
+, nix-index-database
+, ...
+}:
+let
   unstable-packages = with pkgs.unstable; [
     bat
     bottom
@@ -33,10 +33,10 @@
     zip
   ];
 
-  stable-packages = with pkgs; [
+  stable-packages = with  pkgs; [
     # daemons
     openvscode-server
-    
+
     # key tools
     gh
     just
@@ -57,7 +57,8 @@
     pre-commit
     tfswitch
     gnumake
-    
+    wslu
+
     # core languages
     rustup
     go
@@ -97,7 +98,7 @@
     alejandra # nix
     black # python
     ruff # python
-    deadnix # nix
+    nixpkgs-fmt # nix
     golangci-lint
     lua52Packages.luacheck
     nodePackages.prettier
@@ -109,30 +110,20 @@
     hclfmt
 
   ];
-in {
+in
+{
   imports = [
     nix-index-database.hmModules.nix-index
   ];
 
-  home.stateVersion = "22.11";
-
   home = {
     username = "${username}";
     homeDirectory = "/home/${username}";
-
-    sessionVariables.EDITOR = "lvim";
+    stateVersion = "22.11";
+    sessionVariables.EDITOR = "vim";
     sessionVariables.SHELL = "/etc/profiles/per-user/${username}/bin/zsh";
+    packages = stable-packages ++ unstable-packages;
   };
-
-  home.packages =
-    stable-packages
-    ++ unstable-packages
-    ++
-    # FIXME: you can add anything else that doesn't fit into the above two lists in here
-    [
-      # pkgs.some-package
-      # pkgs.unstable.some-other-package
-    ];
 
   home.file = {
     Downloads.source = config.lib.file.mkOutOfStoreSymlink "/mnt/c/Users/${username}/Documents/workspaces";
