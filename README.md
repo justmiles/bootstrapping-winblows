@@ -34,7 +34,9 @@ Bootstrap your Windows desktop like a boss.
 4. From inside of WSL, clone this repo
     
     ```bash
-    git clone git@github.com:justmiles/bootstrapping-winblows.git
+    cd ~/workspaces
+    nix-shell -p git
+    git clone https://github.com/justmiles/bootstrapping-winblows.git
     cd bootstrapping-winblows
     ```
 
