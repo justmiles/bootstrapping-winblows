@@ -2,6 +2,7 @@
 , pkgs
 , username
 , nix-index-database
+, nix-vscode-extensions
 , ...
 }:
 let
@@ -109,7 +110,66 @@ let
     tflint
     hclfmt
 
+    # vscode extensions
+
+    # Golang
+    # vscode-extensions.golang.go
+    # # Terrafomr
+    # vscode-extensions.hashicorp.terraform
+    # # vscode-extensions.hashicorp.hcl # missing
+    # # Python
+    # vscode-extensions.ms-python.python
+    # # Java
+    # vscode-extensions.redhat.java
+    # # vscode-extensions.gabrielbb.vscode-lombok # missing
+    # # Generic language parsers / prettifiers
+    # vscode-extensions.esbenp.prettier-vscode
+    # vscode-extensions.redhat.vscode-yaml
+    # vscode-extensions.jkillian.custom-local-formatters
+    # # Generic tools
+    # vscode-extensions.eamodio.gitlens
+    # vscode-extensions.jebbs.plantuml
+    # # Install snazzy themes
+    # vscode-extensions.pkief.material-icon-theme
+    # vscode-extensions.zhuangtongfa.Material-theme # missing
+    # vscode-extensions.mtxr.sqltools # missing
+    # vscode-extensions.mtxr.sqltools-driver-pg # missing
+    # vscode-extensions.nixpkgs-fmt # missing
+
   ];
+
+  extensions =
+    (import (builtins.fetchGit {
+      url = "https://github.com/nix-community/nix-vscode-extensions";
+      ref = "refs/heads/master";
+      rev = "0339519cb252f665ffc72cb524cd6dea7c9726c1";
+    })).extensions.x86_64-linux;
+
+  extensionsList = with extensions.vscode-marketplace; [
+    # Golang
+    golang.go
+    # Terrafomr
+    hashicorp.terraform
+    hashicorp.hcl
+    # Python
+    ms-python.python
+    # Java
+    redhat.java
+    vscjava.vscode-lombok
+    # Generic language parsers / prettifiers
+    esbenp.prettier-vscode
+    redhat.vscode-yaml
+    jkillian.custom-local-formatters
+    # Generic tools
+    eamodio.gitlens
+    jebbs.plantuml
+    # Install snazzy themes
+    pkief.material-icon-theme
+    # zhuangtongfa.Material-theme
+    mtxr.sqltools
+    mtxr.sqltools-driver-pg
+  ];
+
 in
 {
   imports = [
@@ -117,12 +177,12 @@ in
   ];
 
   home = {
-    username = "${username}";
-    homeDirectory = "/home/${username}";
+    username = "${ username}";
+    homeDirectory = "/home/${ username}";
     stateVersion = "22.11";
-    sessionVariables.EDITOR = "vim";
-    sessionVariables.SHELL = "/etc/profiles/per-user/${username}/bin/zsh";
-    packages = stable-packages ++ unstable-packages;
+    sessionVariables. EDITOR = "vim";
+    sessionVariables. SHELL = "/etc/profiles/per-user/${ username}/bin/zsh";
+    packages = stable-packages ++ unstable-packages ++ extensionsList;
   };
 
   home.file = {
@@ -144,6 +204,35 @@ in
     zoxide.enableZshIntegration = true;
     broot.enable = true;
     broot.enableZshIntegration = true;
+
+    vscode = {
+      enable = true;
+      package = pkgs.openvscode-server;
+      extensions = extensionsList;
+      enableUpdateCheck = true;
+      enableExtensionUpdateCheck = true;
+      keybindings = [
+        {
+          key = "ctrl+q";
+          command = "editor.action.commentLine";
+          when = "editorTextFocus && !editorReadonly";
+        }
+      ];
+      userSettings = {
+        "workbench.colorTheme" = "Default Dark+";
+        "nix.enableLanguageServer" = true;
+        "nix.serverPath" = "nil";
+        "nix.formatterPath" = "nixpkgs-fmt";
+        "editor.formatOnSave" = true;
+        "nix.serverSettings" = {
+          "nil" = {
+            "formatting" = {
+              "command" = [ "nixpkgs-fmt" ];
+            };
+          };
+        };
+      };
+    };
 
     direnv.enable = true;
     direnv.enableZshIntegration = true;
