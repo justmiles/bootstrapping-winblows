@@ -135,7 +135,7 @@ in {
     ];
 
   home.file = {
-    Downloads.source = config.lib.file.mkOutOfStoreSymlink "/mnt/c/Users/mmaddox/Documents/workspaces";
+    Downloads.source = config.lib.file.mkOutOfStoreSymlink "/mnt/c/Users/${username}/Documents/workspaces";
     Downloads.target = "workspaces";
   };
 

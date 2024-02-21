@@ -76,7 +76,7 @@
 
       nixosConfigurations.nixos = mkNixosConfiguration {
         hostname = "nixos";
-        username = "nix";
+        username = "mmaddox";
         modules = [
           nixos-wsl.nixosModules.wsl
           ./wsl.nix

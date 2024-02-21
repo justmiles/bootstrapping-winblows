@@ -14,53 +14,56 @@ Bootstrap your Windows desktop like a boss.
 
     - Removes the majority of anti-features Windows provides
 
-3. You can certainly build your own NixOS WSL distribution but to get started quickly you can also import my pre-built tarball.
-
-    - Create a "workspaces" folder to persist your working documents outside of NixOS
+3. Let's start on the NixOS install. Download this pre-built NixOS installation and import it into a WSL distirbution called "NixOS"
     
-      ```powershell
-      New-Item -Path "$HOME" -Name "workspaces" -ItemType "directory"
-      ```
+    ```powershell
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    (New-Object System.Net.WebClient).DownloadFile("https://github.com/nix-community/NixOS-WSL/releases/download/2311.5.3/nixos-wsl.tar.gz", "$HOME\Downloads\nixos-wsl.tar.gz")
 
-    - Download this pre-built NixOS installation and import it into a WSL distirbution called "NixOS"
+    # Import NixOS
+    wsl --import NixOS "$HOME\NixOS" "$HOME\Downloads\nixos-wsl.tar.gz" --version 2
+
+    # Create a "workspaces" folder to persist your working documents outside of WSL
+    wsl -d NixOS /run/current-system/sw/bin/mkdir -p "/mnt/c/Users/$env:USERNAME/Documents/workspaces"
+    wsl -d NixOS /run/current-system/sw/bin/ln -s "/mnt/c/Users/$env:USERNAME/Documents/workspaces" "/home/nixos/workspaces"
+
+    # Launch NixOS
+    wsl --distribution NixOS
+    ```
+
+4. From inside of WSL, clone this repo
     
-      ```powershell
-      
-      [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-      (New-Object System.Net.WebClient).DownloadFile("https://github.com/justmiles/bootstrapping-winblows/releases/download/v0.0.2/nixos-wsl.tar.gz", "$HOME\Downloads\nixos-wsl.tar.gz")
-      
-      wsl --import NixOS "$HOME\NixOS" "$HOME\Downloads\nixos-wsl.tar.gz" --version 2
-      ```
-
-    - Launch NixOS
-    
-      ```powershell
-      wsl --distribution NixOS
-      ```
-
-4. Use the shell or open http://localhost:3000 for an integrated development environment
-
-## Updating to the latest
-
-1. From inside of WSL, clone this repo
     ```bash
     git clone git@github.com:justmiles/bootstrapping-winblows.git
     cd bootstrapping-winblows
     ```
-    
-2. Rebuild using the latest
+
+5. Update `wsl/flake.nix` to set your username 
+
+    ```bash
+    grep "username =" wsl/flake.nix
+    vi wsl/flake.nix
+    ```
+
+6. Rebuild using the latest
 
     ```bash
     sudo nixos-rebuild switch --flake ./wsl
     ```
 
+7. Use the `wsl -d NixOS` to launch the shell or open http://localhost:3000 for an integrated development environment
+
+8. Fork this repo and start making changes to build out your own environment.
+
+    - check out https://search.nixos.org for packages and flakes
+
 ## Building your own NixOS WSL distribution
 
 Check out these resources:
 
+- https://github.com/nix-community/NixOS-WSL
 - https://github.com/LGUG2Z/nixos-wsl-starter
 - https://github.com/mitchellh/nixos-config?tab=readme-ov-file#setup-wsl
-- https://github.com/nix-community/NixOS-WSL
 
 ## Why does this repo exist?
 
