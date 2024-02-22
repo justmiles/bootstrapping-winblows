@@ -109,33 +109,6 @@ let
     sqlfluff
     tflint
     hclfmt
-
-    # vscode extensions
-
-    # Golang
-    # vscode-extensions.golang.go
-    # # Terrafomr
-    # vscode-extensions.hashicorp.terraform
-    # # vscode-extensions.hashicorp.hcl # missing
-    # # Python
-    # vscode-extensions.ms-python.python
-    # # Java
-    # vscode-extensions.redhat.java
-    # # vscode-extensions.gabrielbb.vscode-lombok # missing
-    # # Generic language parsers / prettifiers
-    # vscode-extensions.esbenp.prettier-vscode
-    # vscode-extensions.redhat.vscode-yaml
-    # vscode-extensions.jkillian.custom-local-formatters
-    # # Generic tools
-    # vscode-extensions.eamodio.gitlens
-    # vscode-extensions.jebbs.plantuml
-    # # Install snazzy themes
-    # vscode-extensions.pkief.material-icon-theme
-    # vscode-extensions.zhuangtongfa.Material-theme # missing
-    # vscode-extensions.mtxr.sqltools # missing
-    # vscode-extensions.mtxr.sqltools-driver-pg # missing
-    # vscode-extensions.nixpkgs-fmt # missing
-
   ];
 
   extensions =
@@ -168,6 +141,8 @@ let
     # zhuangtongfa.Material-theme
     mtxr.sqltools
     mtxr.sqltools-driver-pg
+    # Nix
+    jnoortheen.nix-ide
   ];
 
 in
@@ -181,8 +156,11 @@ in
     homeDirectory = "/home/${ username}";
     stateVersion = "22.11";
     sessionVariables. EDITOR = "vim";
-    sessionVariables. SHELL = "/etc/profiles/per-user/${ username}/bin/zsh";
-    packages = stable-packages ++ unstable-packages ++ extensionsList;
+    sessionVariables. SHELL = "/etc/profiles/per-user/${username}/bin/zsh";
+    packages = stable-packages ++ unstable-packages ++ extensionsList ++ [
+      # (pkgs.callPackage ../modules/code-server.nix { })
+      (pkgs.callPackage ../modules/go-markdown2confluence.nix { })
+    ];
   };
 
   home.file = {
