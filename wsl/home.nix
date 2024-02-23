@@ -2,6 +2,7 @@
 , pkgs
 , username
 , nix-index-database
+, nix-vscode-extensions
 , ...
 }:
 let
@@ -108,8 +109,42 @@ let
     sqlfluff
     tflint
     hclfmt
-
   ];
+
+  extensions =
+    (import (builtins.fetchGit {
+      url = "https://github.com/nix-community/nix-vscode-extensions";
+      ref = "refs/heads/master";
+      rev = "0339519cb252f665ffc72cb524cd6dea7c9726c1";
+    })).extensions.x86_64-linux;
+
+  extensionsList = with extensions.vscode-marketplace; [
+    # Golang
+    golang.go
+    # Terrafomr
+    hashicorp.terraform
+    hashicorp.hcl
+    # Python
+    ms-python.python
+    # Java
+    redhat.java
+    vscjava.vscode-lombok
+    # Generic language parsers / prettifiers
+    esbenp.prettier-vscode
+    redhat.vscode-yaml
+    jkillian.custom-local-formatters
+    # Generic tools
+    eamodio.gitlens
+    jebbs.plantuml
+    # Install snazzy themes
+    pkief.material-icon-theme
+    # zhuangtongfa.Material-theme
+    mtxr.sqltools
+    mtxr.sqltools-driver-pg
+    # Nix
+    jnoortheen.nix-ide
+  ];
+
 in
 {
   imports = [
@@ -117,12 +152,15 @@ in
   ];
 
   home = {
-    username = "${username}";
-    homeDirectory = "/home/${username}";
+    username = "${ username}";
+    homeDirectory = "/home/${ username}";
     stateVersion = "22.11";
-    sessionVariables.EDITOR = "vim";
-    sessionVariables.SHELL = "/etc/profiles/per-user/${username}/bin/zsh";
-    packages = stable-packages ++ unstable-packages;
+    sessionVariables. EDITOR = "vim";
+    sessionVariables. SHELL = "/etc/profiles/per-user/${username}/bin/zsh";
+    packages = stable-packages ++ unstable-packages ++ extensionsList ++ [
+      (pkgs.callPackage ../modules/codegpt.nix { })
+      (pkgs.callPackage ../modules/go-markdown2confluence.nix { })
+    ];
   };
 
   home.file = {
@@ -130,11 +168,21 @@ in
     Downloads.target = "workspaces";
   };
 
+  services.gpg-agent = {
+    enable = true;
+    defaultCacheTtl = 3600;
+    maxCacheTtl = 3600;
+    pinentryFlavor = "tty";
+    enableScDaemon = false;
+  };
+
   programs = {
     home-manager.enable = true;
     nix-index.enable = true;
     nix-index.enableZshIntegration = true;
     nix-index-database.comma.enable = true;
+
+    gpg.enable = true;
 
     fzf.enable = true;
     fzf.enableZshIntegration = true;
@@ -144,6 +192,16 @@ in
     zoxide.enableZshIntegration = true;
     broot.enable = true;
     broot.enableZshIntegration = true;
+
+    vscode = {
+      enable = true;
+      package = pkgs.openvscode-server;
+      extensions = extensionsList;
+      enableUpdateCheck = true;
+      enableExtensionUpdateCheck = true;
+      # keybindings = {}; not supported by openvscode-server (its in the browser cache)
+      # userSettings = {}; not supported by openvscode-server (its in the browser cache)
+    };
 
     direnv.enable = true;
     direnv.enableZshIntegration = true;
