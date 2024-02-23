@@ -158,7 +158,6 @@ in
     sessionVariables. EDITOR = "vim";
     sessionVariables. SHELL = "/etc/profiles/per-user/${username}/bin/zsh";
     packages = stable-packages ++ unstable-packages ++ extensionsList ++ [
-      # (pkgs.callPackage ../modules/code-server.nix { })
       (pkgs.callPackage ../modules/go-markdown2confluence.nix { })
     ];
   };
@@ -168,11 +167,21 @@ in
     Downloads.target = "workspaces";
   };
 
+  services.gpg-agent = {
+    enable = true;
+    defaultCacheTtl = 3600;
+    maxCacheTtl = 3600;
+    pinentryFlavor = "tty";
+    enableScDaemon = false;
+  };
+
   programs = {
     home-manager.enable = true;
     nix-index.enable = true;
     nix-index.enableZshIntegration = true;
     nix-index-database.comma.enable = true;
+
+    gpg.enable = true;
 
     fzf.enable = true;
     fzf.enableZshIntegration = true;
@@ -189,27 +198,8 @@ in
       extensions = extensionsList;
       enableUpdateCheck = true;
       enableExtensionUpdateCheck = true;
-      keybindings = [
-        {
-          key = "ctrl+q";
-          command = "editor.action.commentLine";
-          when = "editorTextFocus && !editorReadonly";
-        }
-      ];
-      userSettings = {
-        "workbench.colorTheme" = "Default Dark+";
-        "nix.enableLanguageServer" = true;
-        "nix.serverPath" = "nil";
-        "nix.formatterPath" = "nixpkgs-fmt";
-        "editor.formatOnSave" = true;
-        "nix.serverSettings" = {
-          "nil" = {
-            "formatting" = {
-              "command" = [ "nixpkgs-fmt" ];
-            };
-          };
-        };
-      };
+      # keybindings = {}; not supported by openvscode-server (its in the browser cache)
+      # userSettings = {}; not supported by openvscode-server (its in the browser cache)
     };
 
     direnv.enable = true;

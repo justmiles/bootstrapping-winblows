@@ -72,7 +72,7 @@
     enable = true;
     description = "Open VSCode Server";
     serviceConfig = {
-      ExecStart = "${pkgs.openvscode-server}/bin/openvscode-server --accept-server-license-terms --without-connection-token --port=3000";
+      ExecStart = "${pkgs.openvscode-server}/bin/openvscode-server --accept-server-license-terms --without-connection-token --host=0.0.0.0 --port=3000";
       Restart = "always";
       User = username;
     };
