@@ -140,6 +140,7 @@ let
     esbenp.prettier-vscode
     redhat.vscode-yaml
     jkillian.custom-local-formatters
+
     # Generic tools
     eamodio.gitlens
     jebbs.plantuml
