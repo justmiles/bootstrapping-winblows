@@ -35,8 +35,6 @@ let
   ];
 
   stable-packages = with  pkgs; [
-    # daemons
-    openvscode-server
 
     # key tools
     gh
@@ -50,12 +48,14 @@ let
     pipx
     pwgen
     chezmoi
-    terraform-docs
     packer
     rclone
     drone-cli
     nomad
     pre-commit
+    nomad
+    terraform-docs
+    terraform
     tfswitch
     gnumake
     wslu
@@ -68,7 +68,7 @@ let
     python3
     typescript
 
-    # rust stuff
+    # rust
     cargo-cache
     cargo-expand
 
@@ -121,14 +121,21 @@ let
   extensionsList = with extensions.vscode-marketplace; [
     # Golang
     golang.go
-    # Terrafomr
+
+    # Terrafom
     hashicorp.terraform
     hashicorp.hcl
+
     # Python
     ms-python.python
+
     # Java
     redhat.java
     vscjava.vscode-lombok
+
+    # Nix
+    jnoortheen.nix-ide
+
     # Generic language parsers / prettifiers
     esbenp.prettier-vscode
     redhat.vscode-yaml
@@ -136,13 +143,17 @@ let
     # Generic tools
     eamodio.gitlens
     jebbs.plantuml
-    # Install snazzy themes
-    pkief.material-icon-theme
-    # zhuangtongfa.Material-theme
+
+    # DB stuff
     mtxr.sqltools
     mtxr.sqltools-driver-pg
-    # Nix
-    jnoortheen.nix-ide
+
+    # Eye candy
+    pkief.material-icon-theme
+    zhuangtongfa.material-theme
+
+    # Misc
+    jkillian.custom-local-formatters
   ];
 
 in
@@ -164,8 +175,8 @@ in
   };
 
   home.file = {
-    Downloads.source = config.lib.file.mkOutOfStoreSymlink "/mnt/c/Users/${username}/Documents/workspaces";
-    Downloads.target = "workspaces";
+    workspaces.source = config.lib.file.mkOutOfStoreSymlink "/mnt/c/Users/${username}/Documents/workspaces";
+    workspaces.target = "workspaces";
   };
 
   services.gpg-agent = {
@@ -195,12 +206,66 @@ in
 
     vscode = {
       enable = true;
-      package = pkgs.openvscode-server;
       extensions = extensionsList;
       enableUpdateCheck = true;
       enableExtensionUpdateCheck = true;
-      # keybindings = {}; not supported by openvscode-server (its in the browser cache)
-      # userSettings = {}; not supported by openvscode-server (its in the browser cache)
+
+      keybindings = [
+        {
+          key = "ctrl+q";
+          command = "editor.action.commentLine";
+          when = "editorTextFocus && !editorReadonly";
+        }
+        {
+          key = "ctrl+d";
+          command = "editor.action.copyLinesDownAction";
+          when = "editorTextFocus && !editorReadonly";
+        }
+      ];
+
+      userSettings = {
+        "workbench.colorTheme" = "Visual Studio Dark";
+        "workbench.iconTheme" = "material-icon-theme";
+        "workbench.startupEditor" = "newUntitledFile";
+        "editor.renderWhitespace" = "all";
+        "editor.formatOnSave" = true;
+        "editor.tabSize" = 2;
+        "extensions.ignoreRecommendations" = true;
+        "extensions.autoCheckUpdates" = false;
+        "explorer.confirmDelete" = false;
+        "extensions.autoUpdate" = false;
+        "files.watcherExclude" = {
+          "**/vendor/**" = true;
+          "**/.config/**" = true;
+        };
+        "gitlens.mode.statusBar.enabled" = false;
+        "gitlens.hovers.currentLine.over" = "line";
+        "explorer.confirmDragAndDrop" = false;
+        "redhat.telemetry.enabled" = false;
+        "telemetry.telemetryLevel" = "off";
+        "customLocalFormatters.formatters" = [
+          {
+            "command" = "${pkgs.terraform}/bin/terraform fmt -";
+            "languages" = [
+              "terraform"
+            ];
+          }
+          {
+            "command" = "${pkgs.nomad}bin/nomad fmt -";
+            "languages" = [
+              "nomad"
+            ];
+          }
+        ];
+        "nix.enableLanguageServer" = true;
+        "nix.serverPath" = "nil";
+        "nix.formatterPath" = "nixpkgs-fmt";
+        "nix.serverSettings" = {
+          "nil" = {
+            "formatting" = { "command" = [ "nixpkgs-fmt" ]; };
+          };
+        };
+      };
     };
 
     direnv.enable = true;

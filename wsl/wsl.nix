@@ -3,7 +3,11 @@
 , pkgs
 , inputs
 , ...
-}: {
+}:
+let
+  code-server = (pkgs.callPackage ../modules/code-server.nix { });
+in
+{
   time.timeZone = "America/Chicago";
 
   networking.hostName = "${hostname}";
@@ -27,11 +31,13 @@
     extraGroups = [
       "wheel"
       "docker"
+      "mlocate"
     ];
   };
 
   environment.systemPackages = [
     (import ./win32yank.nix { inherit pkgs; })
+    code-server
   ];
 
   home-manager.users.${username} = {
@@ -60,19 +66,18 @@
     autoPrune.enable = true;
   };
 
-  # systemd.user = {
-  #   services.locate = {
-  #     enable = true;
-  #     locate = pkgs.mlocate;
-  #     interval = "hourly";
-  #   };
-  # };
-
-  systemd.services.openvscode-server = {
+  services.locate = {
     enable = true;
-    description = "Open VSCode Server";
+    locate = pkgs.mlocate;
+    interval = "hourly";
+    localuser = null;
+  };
+
+  systemd.services.code-server = {
+    enable = true;
+    description = "VS Code in the browser";
     serviceConfig = {
-      ExecStart = "${pkgs.openvscode-server}/bin/openvscode-server --accept-server-license-terms --without-connection-token --host=0.0.0.0 --port=3000";
+      ExecStart = "${code-server}/bin/code-server . --bind-addr=0.0.0.0:3000 --auth=none --user-data-dir /home/${username}/.config/Code --extensions-dir /home/${username}/.vscode/extensions";
       Restart = "always";
       User = username;
     };
