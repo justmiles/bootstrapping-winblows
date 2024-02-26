@@ -111,14 +111,7 @@ let
     hclfmt
   ];
 
-  extensions =
-    (import (builtins.fetchGit {
-      url = "https://github.com/nix-community/nix-vscode-extensions";
-      ref = "refs/heads/master";
-      rev = "0339519cb252f665ffc72cb524cd6dea7c9726c1";
-    })).extensions.x86_64-linux;
-
-  extensionsList = with extensions.vscode-marketplace; [
+  extensionsList = with nix-vscode-extensions.extensions.x86_64-linux.vscode-marketplace; [
     # Golang
     golang.go
 

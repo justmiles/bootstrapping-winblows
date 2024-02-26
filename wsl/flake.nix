@@ -47,7 +47,7 @@
       };
 
       argDefaults = {
-        inherit inputs self nix-index-database;
+        inherit inputs self nix-index-database nix-vscode-extensions;
         channels = {
           inherit nixpkgs nixpkgs-unstable;
         };
