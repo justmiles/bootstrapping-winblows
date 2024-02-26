@@ -237,29 +237,22 @@ in
         "explorer.confirmDragAndDrop" = false;
         "redhat.telemetry.enabled" = false;
         "telemetry.telemetryLevel" = "off";
+        "[terraform]" = {
+          "editor.defaultFormatter" = "hashicorp.terraform";
+        };
+        "[hcl]" = {
+          "editor.defaultFormatter" = "jkillian.custom-local-formatters";
+        };
         "files.associations" = {
           "*.hcl" = "hcl";
+          "*.nomad" = "hcl";
           "*.nomad.hcl" = "hcl";
           "*.pkr.hcl" = "hcl";
         };
         "customLocalFormatters.formatters" = [
           {
-            "command" = "${pkgs.terraform}/bin/terraform fmt -";
-            "languages" = [
-              "terraform"
-            ];
-          }
-          {
-            "command" = "${pkgs.nomad}/bin/nomad fmt -";
-            "languages" = [
-              "nomad"
-            ];
-          }
-          {
             "command" = "${pkgs.hclfmt}/bin/hclfmt";
-            "languages" = [
-              "hcl"
-            ];
+            "languages" = [ "hcl" ];
           }
         ];
         "nix.enableLanguageServer" = true;
@@ -270,6 +263,16 @@ in
             "formatting" = { "command" = [ "nixpkgs-fmt" ]; };
           };
         };
+        "go.toolsManagement.autoUpdate" = false;
+        "go.coverOnSave" = true;
+        "go.coverageDecorator" = {
+          "type" = "gutter";
+          "coveredHighlightColor" = "rgba(64,128,128,0.5)";
+          "uncoveredHighlightColor" = "rgba(128,64,64,0.25)";
+          "coveredGutterStyle" = "blockgreen";
+          "uncoveredGutterStyle" = "blockred";
+        };
+        "go.coverOnSingleTest" = true;
       };
     };
 
