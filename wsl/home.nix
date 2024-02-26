@@ -218,6 +218,7 @@ in
       ];
 
       userSettings = {
+        "git.autorefresh" = true;
         "workbench.colorTheme" = "Visual Studio Dark";
         "workbench.iconTheme" = "material-icon-theme";
         "workbench.startupEditor" = "newUntitledFile";
