@@ -237,6 +237,11 @@ in
         "explorer.confirmDragAndDrop" = false;
         "redhat.telemetry.enabled" = false;
         "telemetry.telemetryLevel" = "off";
+        "files.associations" = {
+          "*.hcl" = "hcl";
+          "*.nomad.hcl" = "hcl";
+          "*.pkr.hcl" = "hcl";
+        };
         "customLocalFormatters.formatters" = [
           {
             "command" = "${pkgs.terraform}/bin/terraform fmt -";
@@ -245,9 +250,15 @@ in
             ];
           }
           {
-            "command" = "${pkgs.nomad}bin/nomad fmt -";
+            "command" = "${pkgs.nomad}/bin/nomad fmt -";
             "languages" = [
               "nomad"
+            ];
+          }
+          {
+            "command" = "${pkgs.hclfmt}/bin/hclfmt";
+            "languages" = [
+              "hcl"
             ];
           }
         ];
