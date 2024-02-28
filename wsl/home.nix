@@ -28,7 +28,6 @@ let
     sd
     tmux
     tree
-    unzip
     vim
     wget
     zip
@@ -249,6 +248,7 @@ in
           "*.nomad" = "hcl";
           "*.nomad.hcl" = "hcl";
           "*.pkr.hcl" = "hcl";
+          "flake.lock" = "json";
         };
         "customLocalFormatters.formatters" = [
           {
